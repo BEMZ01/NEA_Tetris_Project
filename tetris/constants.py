@@ -1,4 +1,4 @@
-import pygame, sys
+import pygame
 pygame.init()
 
 WIDTH, HEIGHT = 1920, 1080
