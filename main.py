@@ -26,7 +26,7 @@ block3 = random.randint(1, 7)
 block4 = random.randint(1, 7)
 
 
-def draw_window(main_menu, grid_created):
+def draw_window(main_menu, grid_created, block_created):
     WIN.fill(DARK_GREY)
     if main_menu == 1:
         pygame.draw.rect(WIN, GREY, ((WIDTH / 2) - 250, (HEIGHT / 4) - 35, 500, 70))
@@ -49,19 +49,19 @@ def draw_window(main_menu, grid_created):
         if not grid_created:
             grid.create_grid()
         if block1 == 1:
-            grid.make_T_block1()
+            grid.make_T_block1(block_created)
         elif block1 == 2:
-            grid.make_line_block1()
+            grid.make_line_block1(block_created)
         elif block1 == 3:
-            grid.make_L_block1()
+            grid.make_L_block1(block_created)
         elif block1 == 4:
-            grid.make_reverse_L_block1()
+            grid.make_reverse_L_block1(block_created)
         elif block1 == 5:
-            grid.make_Z_block1()
+            grid.make_Z_block1(block_created)
         elif block1 == 6:
-            grid.make_reverse_Z_block1()
+            grid.make_reverse_Z_block1(block_created)
         elif block1 == 7:
-            grid.make_square_block1()
+            grid.make_square_block1(block_created)
         pygame.draw.rect(WIN, DARK_GREY, (0, 0, WIDTH, (HEIGHT / 2) - (ROWS * SQUARE_SIZE) / 2))
     elif main_menu == 4:
         grid.draw_double_grid(WIN)
@@ -77,6 +77,7 @@ def main():
     drop_rate1 = 48
     drop_counter1 = 0
     grid_created = False
+    block_created = False
     clock = pygame.time.Clock()
     run = True
     main_menu = 1
@@ -85,6 +86,7 @@ def main():
         mouse = pygame.mouse.get_pos()
         if main_menu == 3 or main_menu == 4:
             grid_created = True
+            block_created = True
         if counter1 <= 5:
             counter1 = counter1 + 1
         if main_menu == 1 or main_menu == 2:
@@ -135,7 +137,7 @@ def main():
                         elif main_menu == 2:
                             pass
 
-        draw_window(main_menu, grid_created)
+        draw_window(main_menu, grid_created, block_created)
 
     pygame.quit()
 

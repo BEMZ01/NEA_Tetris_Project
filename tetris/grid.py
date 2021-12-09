@@ -91,11 +91,12 @@ class Grid:
 
 
 
-    def make_T_block1(self):
-        self.grid1[1][5] = 1
-        self.grid1[2][5] = 1
-        self.grid1[2][4] = 1
-        self.grid1[3][5] = 1
+    def make_T_block1(self, block_created):
+        if not block_created:
+            self.grid1[1][5] = 1
+            self.grid1[2][5] = 1
+            self.grid1[2][4] = 1
+            self.grid1[3][5] = 1
         for row in range (ROWS+4):
             for col in range (COLS):
                 if self.grid1[row][col] == 1:
@@ -103,12 +104,12 @@ class Grid:
                     block.calc_pos(3)
                     block.draw1(WIN)
 
-    def make_line_block1(self):
-
-        self.grid1[0][5] = 1
-        self.grid1[1][5] = 1
-        self.grid1[2][5] = 1
-        self.grid1[3][5] = 1
+    def make_line_block1(self, block_created):
+        if not block_created:
+            self.grid1[0][5] = 1
+            self.grid1[1][5] = 1
+            self.grid1[2][5] = 1
+            self.grid1[3][5] = 1
         for row in range (ROWS+4):
             for col in range (COLS):
                 if self.grid1[row][col] == 1:
@@ -116,12 +117,12 @@ class Grid:
                     block.calc_pos(3)
                     block.draw1(WIN)
 
-    def make_L_block1(self):
-
-        self.grid1[1][4] = 1
-        self.grid1[2][4] = 1
-        self.grid1[3][4] = 1
-        self.grid1[3][5] = 1
+    def make_L_block1(self, block_created):
+        if not block_created:
+            self.grid1[1][4] = 1
+            self.grid1[2][4] = 1
+            self.grid1[3][4] = 1
+            self.grid1[3][5] = 1
         for row in range (ROWS+4):
             for col in range (COLS):
                 if self.grid1[row][col] == 1:
@@ -129,12 +130,12 @@ class Grid:
                     block.calc_pos(3)
                     block.draw1(WIN)
 
-    def make_reverse_L_block1(self):
-
-        self.grid1[1][5] = 1
-        self.grid1[2][5] = 1
-        self.grid1[3][5] = 1
-        self.grid1[3][4] = 1
+    def make_reverse_L_block1(self, block_created):
+        if not block_created:
+            self.grid1[1][5] = 1
+            self.grid1[2][5] = 1
+            self.grid1[3][5] = 1
+            self.grid1[3][4] = 1
         for row in range (ROWS+4):
             for col in range (COLS):
                 if self.grid1[row][col] == 1:
@@ -142,12 +143,12 @@ class Grid:
                     block.calc_pos(3)
                     block.draw1(WIN)
 
-    def make_Z_block1(self):
-
-        self.grid1[1][5] = 1
-        self.grid1[2][5] = 1
-        self.grid1[2][4] = 1
-        self.grid1[3][4] = 1
+    def make_Z_block1(self, block_created):
+        if not block_created:
+            self.grid1[1][5] = 1
+            self.grid1[2][5] = 1
+            self.grid1[2][4] = 1
+            self.grid1[3][4] = 1
         for row in range (ROWS+4):
             for col in range (COLS):
                 if self.grid1[row][col] == 1:
@@ -155,12 +156,12 @@ class Grid:
                     block.calc_pos(3)
                     block.draw1(WIN)
 
-    def make_reverse_Z_block1(self):
-
-        self.grid1[1][4] = 1
-        self.grid1[2][4] = 1
-        self.grid1[2][5] = 1
-        self.grid1[3][5] = 1
+    def make_reverse_Z_block1(self, block_created):
+        if not block_created:
+            self.grid1[1][4] = 1
+            self.grid1[2][4] = 1
+            self.grid1[2][5] = 1
+            self.grid1[3][5] = 1
         for row in range (ROWS+4):
             for col in range (COLS):
                 if self.grid1[row][col] == 1:
@@ -168,12 +169,12 @@ class Grid:
                     block.calc_pos(3)
                     block.draw1(WIN)
 
-    def make_square_block1(self):
-
-        self.grid1[2][4] = 1
-        self.grid1[2][5] = 1
-        self.grid1[3][4] = 1
-        self.grid1[3][5] = 1
+    def make_square_block1(self, block_created):
+        if not block_created:
+            self.grid1[2][4] = 1
+            self.grid1[2][5] = 1
+            self.grid1[3][4] = 1
+            self.grid1[3][5] = 1
         for row in range (ROWS+4):
             for col in range (COLS):
                 if self.grid1[row][col] == 1:
