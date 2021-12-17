@@ -16,15 +16,15 @@ class Block():
     def calc_pos(self, main_menu):
         if main_menu == 3:
             self.x1 = ((WIDTH/8)*3)+(SQUARE_SIZE*self.col1)
-            self.y1 = ((HEIGHT/2)-(SQUARE_SIZE*10))+(SQUARE_SIZE*(self.row1))
-            #self.y1 = ((HEIGHT/2)-(SQUARE_SIZE*10))+(SQUARE_SIZE*(self.row1-4))
+            #self.y1 = ((HEIGHT/2)-(SQUARE_SIZE*10))+(SQUARE_SIZE*(self.row1))
+            self.y1 = ((HEIGHT/2)-(SQUARE_SIZE*10))+(SQUARE_SIZE*(self.row1-4))
         elif main_menu == 4:
             self.x1 = (WIDTH/8)+(SQUARE_SIZE*self.col1)
-            self.y1 = ((HEIGHT/2)-(SQUARE_SIZE*10))+(SQUARE_SIZE*(self.row1))
-            #self.y1 = ((HEIGHT/2)-(SQUARE_SIZE*10))+(SQUARE_SIZE*(self.row1-4))
+            #self.y1 = ((HEIGHT/2)-(SQUARE_SIZE*10))+(SQUARE_SIZE*(self.row1))
+            self.y1 = ((HEIGHT/2)-(SQUARE_SIZE*10))+(SQUARE_SIZE*(self.row1-4))
             self.x2 = ((WIDTH/8)*5)-(SQUARE_SIZE*5)+(SQUARE_SIZE*self.col1)
-            self.y1 = ((HEIGHT/2)-(SQUARE_SIZE*10))+(SQUARE_SIZE*(self.row1))
-            #self.y1 = ((HEIGHT/2)-(SQUARE_SIZE*10))+(SQUARE_SIZE*(self.row1-4))
+            #self.y1 = ((HEIGHT/2)-(SQUARE_SIZE*10))+(SQUARE_SIZE*(self.row1))
+            self.y1 = ((HEIGHT/2)-(SQUARE_SIZE*10))+(SQUARE_SIZE*(self.row1-4))
 
     def draw1(self, win):
         pygame.draw.rect(win, self.colour, (self.x1, self.y1, SQUARE_SIZE, SQUARE_SIZE))
@@ -33,7 +33,7 @@ class Block():
         pygame.draw.rect(win, self.colour, (self.x1, self.y1, SQUARE_SIZE, SQUARE_SIZE))
         pygame.draw.rect(win, self.colour, (self.x2, self.y2, SQUARE_SIZE, SQUARE_SIZE))
 
-    def move1(self, row, col):
+    def move1(self, row, col, main_menu):
         self.row = row
         self.col = col
-        self.calc_pos()
+        self.calc_pos(main_menu)
