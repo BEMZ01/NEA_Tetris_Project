@@ -53,18 +53,24 @@ class Grid:
             for col in range(COLS):
                 self.grid2[pos].append(0)
 
-    def move1(self, rowa, rowb, rowc, rowd, cola, colb, colc, cold, row1, row2, row3, row4, col1, col2, col3, col4, main_menu):
+    def move1(self, rowa, rowb, rowc, rowd, cola, colb, colc, cold, row1, row2, row3, row4, col1, col2, col3, col4, main_menu, block1):
         if col1 < 0 or col2 < 0 or col3 < 0 or col4 < 0:
-            return
+            raise("")
         elif col1 > 9 or col2 > 9 or col3 > 9 or col4 > 9:
-            return
+            raise("")
         if self.grid1[row1][col1] > 1 or self.grid1[row2][col2] > 1 or self.grid1[row3][col3] > 1 or self.grid1[row4][col4] > 1:
             raise("")
-        if rowa + cola < row1 + col1:
-            self.grid1[rowd][cold], self.grid1[row4][col4] = self.grid1[row4][col4], self.grid1[rowd][cold]
-            self.grid1[rowc][colc], self.grid1[row3][col3] = self.grid1[row3][col3], self.grid1[rowc][colc]
-            self.grid1[rowb][colb], self.grid1[row2][col2] = self.grid1[row2][col2], self.grid1[rowb][colb]
-            self.grid1[rowa][cola], self.grid1[row1][col1] = self.grid1[row1][col1], self.grid1[rowa][cola]
+        if row1 == rowa + 1 and row2 == rowb + 1 and row3 == rowc + 1 and row4 == rowd + 1 or col1 == cola + 1 and col2 == colb + 1 and col3 == colc + 1 and col4 == cold + 1 or col1 == cola - 1 and col2 == colb - 1 and col3 == colc - 1 and col4 == cold - 1 or block1 != 5:
+            if rowa + cola < row1 + col1 or rowb + colb < row2 + col2 or rowc + colc < row3 + col3 or rowd + cold < row4 + col4:
+                self.grid1[rowd][cold], self.grid1[row4][col4] = self.grid1[row4][col4], self.grid1[rowd][cold]
+                self.grid1[rowc][colc], self.grid1[row3][col3] = self.grid1[row3][col3], self.grid1[rowc][colc]
+                self.grid1[rowb][colb], self.grid1[row2][col2] = self.grid1[row2][col2], self.grid1[rowb][colb]
+                self.grid1[rowa][cola], self.grid1[row1][col1] = self.grid1[row1][col1], self.grid1[rowa][cola]
+            else:
+                self.grid1[rowa][cola], self.grid1[row1][col1] = self.grid1[row1][col1], self.grid1[rowa][cola]
+                self.grid1[rowb][colb], self.grid1[row2][col2] = self.grid1[row2][col2], self.grid1[rowb][colb]
+                self.grid1[rowc][colc], self.grid1[row3][col3] = self.grid1[row3][col3], self.grid1[rowc][colc]
+                self.grid1[rowd][cold], self.grid1[row4][col4] = self.grid1[row4][col4], self.grid1[rowd][cold]
         else:
             self.grid1[rowa][cola], self.grid1[row1][col1] = self.grid1[row1][col1], self.grid1[rowa][cola]
             self.grid1[rowb][colb], self.grid1[row2][col2] = self.grid1[row2][col2], self.grid1[rowb][colb]
@@ -98,8 +104,113 @@ class Grid:
                         col4 = col
                         squares_located = squares_located + 1
                 if squares_located == 4:
-                    return row1, row2, row3, row4, col1, col2, col3, col4
-
+                    rotation = [
+                        {"right":
+                            [
+                                {"t_block":
+                                    [
+                                        {"north": [row1 + 2, row2 + 1, row3, row4, col1 + 1, col2, col3, col4]},
+                                        {"east": [row1, row2+1, row3, row4, col1, col2+1, col3, col4]},
+                                        {"south": [row1 + 1, row2, row3, row4, col1-1 , col2, col3, col4]},
+                                        {"west": [row1, row2-1, row3, row4, col1, col2, col3-1, col4]}
+                                    ]
+                                },
+                                {"line_block":
+                                    [
+                                        {"north": [row1 + 3, row2 + 2, row3 + 1, row4, col1 + 2, col2 + 1, col3 - 1, col4]},
+                                        {"east": [row1 - 3, row2 , row3 - 2, row4-1, col1+1, col2, col3-1, col4-2]},
+                                        {"south": [row1 + 3, row2 + 2, row3 + 1, row4, col1 + 2, col2 + 1, col3 - 1, col4]},
+                                        {"west": [row1 - 3, row2 , row3 - 2, row4-1, col1+1, col2, col3-1, col4-2]}
+                                    ]
+                                },
+                                {"l_block":
+                                    [
+                                        {"north": [row1 + 1, row2, row3, row4 - 1, col1 - 1, col2, col3 - 1, col4]},
+                                        {"east": [row1 - 1, row2, row3 - 1, row4, col1, col2, col3 - 1, col4 + 1]},
+                                        {"south": [row1 + 2, row2 + 2, row3, row4, col1, col2 + 1, col3 + 1, col4]},
+                                        {"west": [row1, row2 - 2, row3, row4, col1 - 1, col2 + 1, col3, col4]}
+                                    ]
+                                },
+                                {"reverse_l_block":
+                                    [
+                                        {"north": [row1 + 2, row2, row3, row4 - 1, col1 + 1, col2 - 1, col3, col4]},
+                                        {"east": [row1, row2 - 2, row3, row4 - 2, col1 + 1, col2 + 1, col3 , col4 ]},
+                                        {"south": [row1 + 1, row2 + 1, row3, row4, col1 - 1, col2, col3 , col4 + 1]},
+                                        {"west": [row1 + 1, row2, row3 - 1, row4, col1, col2, col3 - 1, col4 - 1]}
+                                    ]
+                                },
+                                {"z_block":
+                                    [
+                                        {"north": [row1 + 2, row2, row3, row4, col1 + 1, col2, col3, col4 + 1]},
+                                        {"east": [row1, row2, row3, row4 - 2, col1 + 1, col2-1, col3-1, col4-1]},
+                                        {"south": [row1 + 2, row2, row3, row4, col1 + 1, col2, col3, col4 + 1]},
+                                        {"west": [row1, row2, row3, row4 - 2, col1 + 1, col2-1, col3-1, col4-1]}
+                                    ]
+                                },
+                                {"reverse_z_block":
+                                    [
+                                        {"north": [row1 + 2, row2, row3, row4, col1, col2 + 2, col3, col4]},
+                                        {"east": [row1, row2, row3-2 , row4, col1, col2-2, col3, col4]},
+                                        {"south": [row1 + 2, row2, row3, row4, col1, col2 + 2, col3, col4]},
+                                        {"west": [row1, row2, row3-2 , row4, col1, col2-2, col3, col4]}
+                                    ]
+                                }
+                            ]
+                        },
+                        {"left":
+                            [
+                                {"t_block":
+                                    [
+                                        {"north": [row1 + 1, row2, row3, row4, col1 + 1, col2, col3, col4]},
+                                        {"east": [row1, row2 - 1, row3, row4 - 2, col1, col2, col3, col4 - 1]},
+                                        {"south": [row1 + 2, row2, row3 + 1, row4, col1 - 1, col2, col3, col4]},
+                                        {"west": [row1 - 1, row2, row3, row4, col1 + 1, col2, col3, col4]}
+                                    ]
+                                },
+                                {"line_block":
+                                    [
+                                        {"north": [row1 + 3, row2 + 2, row3 + 1, row4, col1 - 2, col2 - 1, col3 + 1, col4]},
+                                        {"east": [row1 - 3, row2 - 2, row3, row4 - 1, col1 + 2, col2 + 1, col3, col4 - 1]},
+                                        {"south": [row1 + 3, row2 + 2, row3 + 1, row4, col1 - 2, col2 - 1, col3 + 1, col4]},
+                                        {"west": [row1 - 3, row2 - 2, row3, row4 - 1, col1 + 2, col2 + 1, col3, col4 - 1]}
+                                    ]
+                                },
+                                {"l_block":
+                                    [
+                                        {"north": [row1 + 2, row2, row3, row4, col1 - 1, col2 + 1, col3, col4]},
+                                        {"east": [row1 - 1, row2, row3+1, row4, col1 + 1, col2, col3, col4 + 1]},
+                                        {"south": [row1 + 1, row2 + 1, row3, row4, col1, col2 + 1, col3, col4 - 1]},
+                                        {"west": [row1 , row2-2, row3, row4-2, col1 - 1, col2, col3, col4 - 1]}
+                                    ]
+                                },
+                                {"reverse_l_block":
+                                    [
+                                        {"north": [row1 + 1, row2, row3 - 1, row4, col1 + 1, col2, col3, col4 + 1]},
+                                        {"east": [row1, row2, row3, row4 - 2, col1 + 1, col2, col3, col4 - 1]},
+                                        {"south": [row1 +2, row2 + 2, row3, row4, col1 - 1, col2, col3 - 1, col4]},
+                                        {"west": [row1 - 1, row2, row3 - 1, row4, col1 + 1, col2, col3, col4 - 1]}
+                                    ]
+                                },
+                                {"z_block":
+                                    [
+                                        {"north": [row1 + 2, row2, row3, row4, col1, col2, col3-2, col4]},
+                                        {"east": [row1, row2, row3, row4-2, col1+2, col2, col3, col4]},
+                                        {"south": [row1 + 2, row2, row3, row4, col1, col2, col3-2, col4]},
+                                        {"west": [row1, row2, row3, row4-2, col1+2, col2, col3, col4]}
+                                    ]
+                                },
+                                {"reverse_z_block":
+                                    [
+                                        {"north": [row1 + 2, row2, row3, row4, col1, col2, col3, col4 - 2]},
+                                        {"east": [row1, row2, row3 - 2, row4, col1+1, col2 -1, col3+1, col4+1]},
+                                        {"south": [row1 + 2, row2, row3, row4, col1, col2, col3, col4 - 2]},
+                                        {"west": [row1, row2, row3 - 2, row4, col1+1, col2 - 1, col3+1, col4+1]},
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                    return row1, row2, row3, row4, col1, col2, col3, col4, rotation
 
 
     def make_T_block1(self, block_created, main_menu):
@@ -217,6 +328,18 @@ class Grid:
         block4 = random.randint(1, 7)
         return block1, block2, block3, block4
 
+    def erase_block(self, block1, block2, block3, block4):
+        for row in range (ROWS+4):
+            for col in range (COLS):
+                if self.grid1[row][col] == 1:
+                    self.grid1[row][col] = 0
+        if block1 == 0:
+            block1 = block2
+            block2 = block3
+            block3 = block4
+            block4 = random.randint(1, 7)
+        return block1, block2, block3, block4
+
     def draw_blocks(self, main_menu):
         for row in range (ROWS+4):
             for col in range (COLS):
@@ -248,3 +371,21 @@ class Grid:
                     block = Block(row, 0, col, 0, YELLOW)
                     block.calc_pos(main_menu)
                     block.draw1(WIN)
+
+    def check_grid(self):
+        lines_cleared = 0
+        for row in range (ROWS+4):
+            counter = 0
+            for col in range (COLS):
+                if self.grid1[row][col] != 0:
+                    if row < 4:
+                        self.grid1 = []
+                        return -1
+                    counter = counter + 1
+                else:
+                    pass
+            if counter == 10:
+                self.grid1.pop(row)
+                self.grid1.insert(0, [0,0,0,0,0,0,0,0,0,0])
+                lines_cleared += 1
+        return lines_cleared

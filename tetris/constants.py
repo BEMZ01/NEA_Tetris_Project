@@ -18,5 +18,6 @@ YELLOW = (255, 255, 0)
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 
+GIANT_FONT = pygame.font.SysFont('Corbel', 200)
 BIG_FONT = pygame.font.SysFont('Corbel', 50)
 SMALL_FONT = pygame.font.SysFont('Corbel', 25)
