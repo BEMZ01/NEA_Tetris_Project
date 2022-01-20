@@ -25,8 +25,8 @@ global block1
 global block2
 global block3
 global block4
-block1 = 1
-block2 = 1
+block1 = random.randint(1, 7)
+block2 = random.randint(1, 7)
 block3 = random.randint(1, 7)
 block4 = random.randint(1, 7)
 
@@ -211,13 +211,14 @@ def main():
             score1 = 0
             total_lines_cleared = 0
             level1 = 0
+            hold1 = 0
         elif main_menu == 5:
             pass
         else:
             if drop_counter1 >= drop_rate1:
                 drop_counter1 = 0
                 if drop_rate1 == 0:
-                    score1 = score1 +1
+                    score1 += 1
                 try:
                     piece = grid.get_square_position()
                     grid.move1(piece[0], piece[1], piece[2], piece[3], piece[4], piece[5], piece[6], piece[7], piece[0]+1, piece[1]+1, piece[2]+1, piece[3]+1, piece[4], piece[5], piece[6], piece[7], main_menu, block1)
@@ -273,19 +274,19 @@ def main():
                         elif level1 == 9:
                             drop_rate1 = 6
                             drop_ratea = 6
-                        elif level1 >= 10 and level1 <= 12:
+                        elif 10 <= level1 <= 12:
                             drop_rate1 = 5
                             drop_ratea = 5
-                        elif level1 >= 13 and level1 <= 15:
+                        elif 13 <= level1 <= 15:
                             drop_rate1 = 4
                             drop_ratea = 4
-                        elif level1 >= 13 and level1 <= 15:
+                        elif 13 <= level1 <= 15:
                             drop_rate1 = 4
                             drop_ratea = 4
-                        elif level1 >= 16 and level1 <= 18:
+                        elif 16 <= level1 <= 18:
                             drop_rate1 = 3
                             drop_ratea = 3
-                        elif level1 >= 19 and level1 <= 28:
+                        elif 19 <= level1 <= 28:
                             drop_rate1 = 2
                             drop_ratea = 2
                         else:
@@ -325,7 +326,9 @@ def main():
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_w:
-                    if holda == False:
+                    if main_menu == 1 or main_menu == 2 or main_menu == 5:
+                        pass
+                    elif holda == False:
                         hold1, block1 = block1, hold1
                         blocks = grid.erase_block(block1, block2, block3, block4)
                         block1, block2, block3, block4 = blocks[0], blocks[1], blocks[2], blocks[3]
