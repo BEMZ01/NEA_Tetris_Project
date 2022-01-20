@@ -1,20 +1,29 @@
-import tensorflow as tf, pygame, os, random
+import os
+try:
+    versions = os.listdir("C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/")
+    for ver in versions:
+        os.add_dll_directory("C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/"+str(ver)+"/bin")
+        print("Found NVIDIA CUDA version: "+str(ver))
+    os.add_dll_directory("C:/tools/cuda/bin")
+except AttributeError:
+    pass
+
+import tensorflow as tf
+import pygame
+import random
+from tetris.constants import WIDTH, HEIGHT, DARK_GREY, GREY, RED, GREEN, PURPLE, LIGHT_BLUE, BLUE, ORANGE, YELLOW, \
+    WHITE, BLACK, ROWS, SQUARE_SIZE, BIG_FONT
+from tetris.grid import Grid
+from tetris.text import quit, options, play, singleplayer, pve, pvp, back, game_over, replay
 
 try:
-    os.add_dll_directory("C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.4/bin")
     print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
 except AttributeError:
     print("Num CPUs Available: ", len(tf.config.list_physical_devices('CPU')))
 pygame.init()
 
-from tetris.constants import WIDTH, HEIGHT, DARK_GREY, GREY, RED, GREEN, PURPLE, LIGHT_BLUE, BLUE, ORANGE, YELLOW, WHITE, BLACK, ROWS, SQUARE_SIZE, SMALL_FONT, BIG_FONT
-from tetris.grid import Grid
-from tetris.blocks import Block
-from tetris.text import quit, options, play, singleplayer, pve, pvp, back, game_over, replay
-
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("NAE Tetris Project")
-
 
 grid = Grid()
 
@@ -72,87 +81,185 @@ def draw_window(main_menu, grid_created, block_created, level1, score1, lines_cl
             grid.make_square_block1(block_created, main_menu)
         grid.draw_blocks(main_menu)
         pygame.draw.rect(WIN, DARK_GREY, (0, 0, WIDTH, (HEIGHT / 2) - (ROWS * SQUARE_SIZE) / 2))
-        if holda == False:
-            pygame.draw.rect(WIN, GREY, (WIDTH / 2 - SQUARE_SIZE * 8, HEIGHT / 4 - SQUARE_SIZE * 5 + 30, SQUARE_SIZE * 2 + 30, SQUARE_SIZE * 2 + 30))
+        if not holda:
+            pygame.draw.rect(WIN, GREY, (
+                WIDTH / 2 - SQUARE_SIZE * 8, HEIGHT / 4 - SQUARE_SIZE * 5 + 30, SQUARE_SIZE * 2 + 30,
+                SQUARE_SIZE * 2 + 30))
         else:
-            pygame.draw.rect(WIN, BLACK, (WIDTH / 2 - SQUARE_SIZE * 8, HEIGHT / 4 - SQUARE_SIZE * 5 + 30, SQUARE_SIZE * 2 + 30, SQUARE_SIZE * 2 + 30))
-        pygame.draw.rect(WIN, GREY, (WIDTH / 2 + SQUARE_SIZE * 6 - 30, HEIGHT / 4 - SQUARE_SIZE * 5 + 30, SQUARE_SIZE * 2 + 30, SQUARE_SIZE * 6 + 90))
+            pygame.draw.rect(WIN, BLACK, (
+                WIDTH / 2 - SQUARE_SIZE * 8, HEIGHT / 4 - SQUARE_SIZE * 5 + 30, SQUARE_SIZE * 2 + 30,
+                SQUARE_SIZE * 2 + 30))
+        pygame.draw.rect(WIN, GREY, (
+            WIDTH / 2 + SQUARE_SIZE * 6 - 30, HEIGHT / 4 - SQUARE_SIZE * 5 + 30, SQUARE_SIZE * 2 + 30,
+            SQUARE_SIZE * 6 + 90))
         if hold1 == 1:
-            pygame.draw.rect(WIN, PURPLE, (WIDTH / 2 - SQUARE_SIZE * 7 + 15, HEIGHT / 2 - SQUARE_SIZE * 9.75 +15, SQUARE_SIZE * 0.5, SQUARE_SIZE * 1.5))
-            pygame.draw.rect(WIN, PURPLE, (WIDTH / 2 - SQUARE_SIZE * 7.5 + 15, HEIGHT / 2 - SQUARE_SIZE * 9.25 + 15, SQUARE_SIZE * 0.5, SQUARE_SIZE * 0.5))
+            pygame.draw.rect(WIN, PURPLE, (
+                WIDTH / 2 - SQUARE_SIZE * 7 + 15, HEIGHT / 2 - SQUARE_SIZE * 9.75 + 15, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 1.5))
+            pygame.draw.rect(WIN, PURPLE, (
+                WIDTH / 2 - SQUARE_SIZE * 7.5 + 15, HEIGHT / 2 - SQUARE_SIZE * 9.25 + 15, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 0.5))
         elif hold1 == 2:
-            pygame.draw.rect(WIN, LIGHT_BLUE, (WIDTH / 2 - SQUARE_SIZE * 7.25 + 15, HEIGHT / 2 - SQUARE_SIZE * 10 +15, SQUARE_SIZE * 0.5, SQUARE_SIZE * 2))
+            pygame.draw.rect(WIN, LIGHT_BLUE, (
+                WIDTH / 2 - SQUARE_SIZE * 7.25 + 15, HEIGHT / 2 - SQUARE_SIZE * 10 + 15, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 2))
         elif hold1 == 3:
-            pygame.draw.rect(WIN, ORANGE, (WIDTH / 2 - SQUARE_SIZE * 7.5 + 15, HEIGHT / 2 - SQUARE_SIZE * 9.75 +15, SQUARE_SIZE * 0.5, SQUARE_SIZE * 1.5))
-            pygame.draw.rect(WIN, ORANGE, (WIDTH / 2 - SQUARE_SIZE * 7 + 15, HEIGHT / 2 - SQUARE_SIZE * 8.75 + 15, SQUARE_SIZE * 0.5, SQUARE_SIZE * 0.5))
+            pygame.draw.rect(WIN, ORANGE, (
+                WIDTH / 2 - SQUARE_SIZE * 7.5 + 15, HEIGHT / 2 - SQUARE_SIZE * 9.75 + 15, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 1.5))
+            pygame.draw.rect(WIN, ORANGE, (
+                WIDTH / 2 - SQUARE_SIZE * 7 + 15, HEIGHT / 2 - SQUARE_SIZE * 8.75 + 15, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 0.5))
         elif hold1 == 4:
-            pygame.draw.rect(WIN, BLUE, (WIDTH / 2 - SQUARE_SIZE * 7 + 15, HEIGHT / 2 - SQUARE_SIZE * 9.75 +15, SQUARE_SIZE * 0.5, SQUARE_SIZE * 1.5))
-            pygame.draw.rect(WIN, BLUE, (WIDTH / 2 - SQUARE_SIZE * 7.5 + 15, HEIGHT / 2 - SQUARE_SIZE * 8.75 + 15, SQUARE_SIZE * 0.5, SQUARE_SIZE * 0.5))
+            pygame.draw.rect(WIN, BLUE, (
+                WIDTH / 2 - SQUARE_SIZE * 7 + 15, HEIGHT / 2 - SQUARE_SIZE * 9.75 + 15, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 1.5))
+            pygame.draw.rect(WIN, BLUE, (
+                WIDTH / 2 - SQUARE_SIZE * 7.5 + 15, HEIGHT / 2 - SQUARE_SIZE * 8.75 + 15, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 0.5))
         elif hold1 == 5:
-            pygame.draw.rect(WIN, RED, (WIDTH / 2 - SQUARE_SIZE * 7 + 15, HEIGHT / 2 - SQUARE_SIZE * 9.75 +15, SQUARE_SIZE * 0.5, SQUARE_SIZE * 1))
-            pygame.draw.rect(WIN, RED, (WIDTH / 2 - SQUARE_SIZE * 7.5 + 15, HEIGHT / 2 - SQUARE_SIZE * 9.25 + 15, SQUARE_SIZE * 0.5, SQUARE_SIZE * 1))
+            pygame.draw.rect(WIN, RED, (
+                WIDTH / 2 - SQUARE_SIZE * 7 + 15, HEIGHT / 2 - SQUARE_SIZE * 9.75 + 15, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 1))
+            pygame.draw.rect(WIN, RED, (
+                WIDTH / 2 - SQUARE_SIZE * 7.5 + 15, HEIGHT / 2 - SQUARE_SIZE * 9.25 + 15, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 1))
         elif hold1 == 6:
-            pygame.draw.rect(WIN, GREEN, (WIDTH / 2 - SQUARE_SIZE * 7.5 + 15, HEIGHT / 2 - SQUARE_SIZE * 9.75 +15, SQUARE_SIZE * 0.5, SQUARE_SIZE * 1))
-            pygame.draw.rect(WIN, GREEN, (WIDTH / 2 - SQUARE_SIZE * 7 + 15, HEIGHT / 2 - SQUARE_SIZE * 9.25 + 15, SQUARE_SIZE * 0.5, SQUARE_SIZE * 1))
+            pygame.draw.rect(WIN, GREEN, (
+                WIDTH / 2 - SQUARE_SIZE * 7.5 + 15, HEIGHT / 2 - SQUARE_SIZE * 9.75 + 15, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 1))
+            pygame.draw.rect(WIN, GREEN, (
+                WIDTH / 2 - SQUARE_SIZE * 7 + 15, HEIGHT / 2 - SQUARE_SIZE * 9.25 + 15, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 1))
         elif hold1 == 7:
-            pygame.draw.rect(WIN, YELLOW, (WIDTH / 2 - SQUARE_SIZE * 7.5 + 15, HEIGHT / 2 - SQUARE_SIZE * 9.5 +15, SQUARE_SIZE, SQUARE_SIZE))
+            pygame.draw.rect(WIN, YELLOW, (
+                WIDTH / 2 - SQUARE_SIZE * 7.5 + 15, HEIGHT / 2 - SQUARE_SIZE * 9.5 + 15, SQUARE_SIZE, SQUARE_SIZE))
         if block2 == 1:
-            pygame.draw.rect(WIN, PURPLE, (WIDTH / 2 + SQUARE_SIZE * 7 - 15, HEIGHT / 2 - SQUARE_SIZE * 9.75 +15, SQUARE_SIZE * 0.5, SQUARE_SIZE * 1.5))
-            pygame.draw.rect(WIN, PURPLE, (WIDTH / 2 + SQUARE_SIZE * 6.5 - 15, HEIGHT / 2 - SQUARE_SIZE * 9.25 + 15, SQUARE_SIZE * 0.5, SQUARE_SIZE * 0.5))
+            pygame.draw.rect(WIN, PURPLE, (
+                WIDTH / 2 + SQUARE_SIZE * 7 - 15, HEIGHT / 2 - SQUARE_SIZE * 9.75 + 15, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 1.5))
+            pygame.draw.rect(WIN, PURPLE, (
+                WIDTH / 2 + SQUARE_SIZE * 6.5 - 15, HEIGHT / 2 - SQUARE_SIZE * 9.25 + 15, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 0.5))
         elif block2 == 2:
-            pygame.draw.rect(WIN, LIGHT_BLUE, (WIDTH / 2 + SQUARE_SIZE * 6.75 - 15, HEIGHT / 2 - SQUARE_SIZE * 10 +15, SQUARE_SIZE * 0.5, SQUARE_SIZE * 2))
+            pygame.draw.rect(WIN, LIGHT_BLUE, (
+                WIDTH / 2 + SQUARE_SIZE * 6.75 - 15, HEIGHT / 2 - SQUARE_SIZE * 10 + 15, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 2))
         elif block2 == 3:
-            pygame.draw.rect(WIN, ORANGE, (WIDTH / 2 + SQUARE_SIZE * 6.5 - 15, HEIGHT / 2 - SQUARE_SIZE * 9.75 +15, SQUARE_SIZE * 0.5, SQUARE_SIZE * 1.5))
-            pygame.draw.rect(WIN, ORANGE, (WIDTH / 2 + SQUARE_SIZE * 7 - 15, HEIGHT / 2 - SQUARE_SIZE * 8.75 + 15, SQUARE_SIZE * 0.5, SQUARE_SIZE * 0.5))
+            pygame.draw.rect(WIN, ORANGE, (
+                WIDTH / 2 + SQUARE_SIZE * 6.5 - 15, HEIGHT / 2 - SQUARE_SIZE * 9.75 + 15, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 1.5))
+            pygame.draw.rect(WIN, ORANGE, (
+                WIDTH / 2 + SQUARE_SIZE * 7 - 15, HEIGHT / 2 - SQUARE_SIZE * 8.75 + 15, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 0.5))
         elif block2 == 4:
-            pygame.draw.rect(WIN, BLUE, (WIDTH / 2 + SQUARE_SIZE * 7 - 15, HEIGHT / 2 - SQUARE_SIZE * 9.75 +15, SQUARE_SIZE * 0.5, SQUARE_SIZE * 1.5))
-            pygame.draw.rect(WIN, BLUE, (WIDTH / 2 + SQUARE_SIZE * 6.5 - 15, HEIGHT / 2 - SQUARE_SIZE * 8.75 + 15, SQUARE_SIZE * 0.5, SQUARE_SIZE * 0.5))
+            pygame.draw.rect(WIN, BLUE, (
+                WIDTH / 2 + SQUARE_SIZE * 7 - 15, HEIGHT / 2 - SQUARE_SIZE * 9.75 + 15, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 1.5))
+            pygame.draw.rect(WIN, BLUE, (
+                WIDTH / 2 + SQUARE_SIZE * 6.5 - 15, HEIGHT / 2 - SQUARE_SIZE * 8.75 + 15, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 0.5))
         elif block2 == 5:
-            pygame.draw.rect(WIN, RED, (WIDTH / 2 + SQUARE_SIZE * 7 - 15, HEIGHT / 2 - SQUARE_SIZE * 9.75 +15, SQUARE_SIZE * 0.5, SQUARE_SIZE * 1))
-            pygame.draw.rect(WIN, RED, (WIDTH / 2 + SQUARE_SIZE * 6.5 - 15, HEIGHT / 2 - SQUARE_SIZE * 9.25 + 15, SQUARE_SIZE * 0.5, SQUARE_SIZE * 1))
+            pygame.draw.rect(WIN, RED, (
+                WIDTH / 2 + SQUARE_SIZE * 7 - 15, HEIGHT / 2 - SQUARE_SIZE * 9.75 + 15, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 1))
+            pygame.draw.rect(WIN, RED, (
+                WIDTH / 2 + SQUARE_SIZE * 6.5 - 15, HEIGHT / 2 - SQUARE_SIZE * 9.25 + 15, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 1))
         elif block2 == 6:
-            pygame.draw.rect(WIN, GREEN, (WIDTH / 2 + SQUARE_SIZE * 6.5 - 15, HEIGHT / 2 - SQUARE_SIZE * 9.75 +15, SQUARE_SIZE * 0.5, SQUARE_SIZE * 1))
-            pygame.draw.rect(WIN, GREEN, (WIDTH / 2 + SQUARE_SIZE * 7 - 15, HEIGHT / 2 - SQUARE_SIZE * 9.25 + 15, SQUARE_SIZE * 0.5, SQUARE_SIZE * 1))
+            pygame.draw.rect(WIN, GREEN, (
+                WIDTH / 2 + SQUARE_SIZE * 6.5 - 15, HEIGHT / 2 - SQUARE_SIZE * 9.75 + 15, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 1))
+            pygame.draw.rect(WIN, GREEN, (
+                WIDTH / 2 + SQUARE_SIZE * 7 - 15, HEIGHT / 2 - SQUARE_SIZE * 9.25 + 15, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 1))
         elif block2 == 7:
-            pygame.draw.rect(WIN, YELLOW, (WIDTH / 2 + SQUARE_SIZE * 6.5 - 15, HEIGHT / 2 - SQUARE_SIZE * 9.5 +15, SQUARE_SIZE, SQUARE_SIZE))
+            pygame.draw.rect(WIN, YELLOW, (
+                WIDTH / 2 + SQUARE_SIZE * 6.5 - 15, HEIGHT / 2 - SQUARE_SIZE * 9.5 + 15, SQUARE_SIZE, SQUARE_SIZE))
         if block3 == 1:
-            pygame.draw.rect(WIN, PURPLE, (WIDTH / 2 + SQUARE_SIZE * 7 - 15, HEIGHT / 2 - SQUARE_SIZE * 7.75 + 45, SQUARE_SIZE * 0.5, SQUARE_SIZE * 1.5))
-            pygame.draw.rect(WIN, PURPLE, (WIDTH / 2 + SQUARE_SIZE * 6.5 - 15, HEIGHT / 2 - SQUARE_SIZE * 7.25 + 45, SQUARE_SIZE * 0.5, SQUARE_SIZE * 0.5))
+            pygame.draw.rect(WIN, PURPLE, (
+                WIDTH / 2 + SQUARE_SIZE * 7 - 15, HEIGHT / 2 - SQUARE_SIZE * 7.75 + 45, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 1.5))
+            pygame.draw.rect(WIN, PURPLE, (
+                WIDTH / 2 + SQUARE_SIZE * 6.5 - 15, HEIGHT / 2 - SQUARE_SIZE * 7.25 + 45, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 0.5))
         elif block3 == 2:
-            pygame.draw.rect(WIN, LIGHT_BLUE, (WIDTH / 2 + SQUARE_SIZE * 6.75 - 15, HEIGHT / 2 - SQUARE_SIZE * 8 + 45, SQUARE_SIZE * 0.5, SQUARE_SIZE * 2))
+            pygame.draw.rect(WIN, LIGHT_BLUE, (
+                WIDTH / 2 + SQUARE_SIZE * 6.75 - 15, HEIGHT / 2 - SQUARE_SIZE * 8 + 45, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 2))
         elif block3 == 3:
-            pygame.draw.rect(WIN, ORANGE, (WIDTH / 2 + SQUARE_SIZE * 6.5 - 15, HEIGHT / 2 - SQUARE_SIZE * 7.75 + 45, SQUARE_SIZE * 0.5, SQUARE_SIZE * 1.5))
-            pygame.draw.rect(WIN, ORANGE, (WIDTH / 2 + SQUARE_SIZE * 7 - 15, HEIGHT / 2 - SQUARE_SIZE * 6.75 + 45, SQUARE_SIZE * 0.5, SQUARE_SIZE * 0.5))
+            pygame.draw.rect(WIN, ORANGE, (
+                WIDTH / 2 + SQUARE_SIZE * 6.5 - 15, HEIGHT / 2 - SQUARE_SIZE * 7.75 + 45, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 1.5))
+            pygame.draw.rect(WIN, ORANGE, (
+                WIDTH / 2 + SQUARE_SIZE * 7 - 15, HEIGHT / 2 - SQUARE_SIZE * 6.75 + 45, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 0.5))
         elif block3 == 4:
-            pygame.draw.rect(WIN, BLUE, (WIDTH / 2 + SQUARE_SIZE * 7 - 15, HEIGHT / 2 - SQUARE_SIZE * 7.75 + 45, SQUARE_SIZE * 0.5, SQUARE_SIZE * 1.5))
-            pygame.draw.rect(WIN, BLUE, (WIDTH / 2 + SQUARE_SIZE * 6.5 - 15, HEIGHT / 2 - SQUARE_SIZE * 6.75 + 45, SQUARE_SIZE * 0.5, SQUARE_SIZE * 0.5))
+            pygame.draw.rect(WIN, BLUE, (
+                WIDTH / 2 + SQUARE_SIZE * 7 - 15, HEIGHT / 2 - SQUARE_SIZE * 7.75 + 45, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 1.5))
+            pygame.draw.rect(WIN, BLUE, (
+                WIDTH / 2 + SQUARE_SIZE * 6.5 - 15, HEIGHT / 2 - SQUARE_SIZE * 6.75 + 45, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 0.5))
         elif block3 == 5:
-            pygame.draw.rect(WIN, RED, (WIDTH / 2 + SQUARE_SIZE * 7 - 15, HEIGHT / 2 - SQUARE_SIZE * 7.75 + 45, SQUARE_SIZE * 0.5, SQUARE_SIZE * 1))
-            pygame.draw.rect(WIN, RED, (WIDTH / 2 + SQUARE_SIZE * 6.5 - 15, HEIGHT / 2 - SQUARE_SIZE * 7.25 + 45, SQUARE_SIZE * 0.5, SQUARE_SIZE * 1))
+            pygame.draw.rect(WIN, RED, (
+                WIDTH / 2 + SQUARE_SIZE * 7 - 15, HEIGHT / 2 - SQUARE_SIZE * 7.75 + 45, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 1))
+            pygame.draw.rect(WIN, RED, (
+                WIDTH / 2 + SQUARE_SIZE * 6.5 - 15, HEIGHT / 2 - SQUARE_SIZE * 7.25 + 45, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 1))
         elif block3 == 6:
-            pygame.draw.rect(WIN, GREEN, (WIDTH / 2 + SQUARE_SIZE * 6.5 - 15, HEIGHT / 2 - SQUARE_SIZE * 7.75 + 45, SQUARE_SIZE * 0.5, SQUARE_SIZE * 1))
-            pygame.draw.rect(WIN, GREEN, (WIDTH / 2 + SQUARE_SIZE * 7 - 15, HEIGHT / 2 - SQUARE_SIZE * 7.25 + 45, SQUARE_SIZE * 0.5, SQUARE_SIZE * 1))
+            pygame.draw.rect(WIN, GREEN, (
+                WIDTH / 2 + SQUARE_SIZE * 6.5 - 15, HEIGHT / 2 - SQUARE_SIZE * 7.75 + 45, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 1))
+            pygame.draw.rect(WIN, GREEN, (
+                WIDTH / 2 + SQUARE_SIZE * 7 - 15, HEIGHT / 2 - SQUARE_SIZE * 7.25 + 45, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 1))
         elif block3 == 7:
-            pygame.draw.rect(WIN, YELLOW, (WIDTH / 2 + SQUARE_SIZE * 6.5 - 15, HEIGHT / 2 - SQUARE_SIZE * 7.5 + 45, SQUARE_SIZE, SQUARE_SIZE))
+            pygame.draw.rect(WIN, YELLOW, (
+                WIDTH / 2 + SQUARE_SIZE * 6.5 - 15, HEIGHT / 2 - SQUARE_SIZE * 7.5 + 45, SQUARE_SIZE, SQUARE_SIZE))
         if block4 == 1:
-            pygame.draw.rect(WIN, PURPLE, (WIDTH / 2 + SQUARE_SIZE * 7 - 15, HEIGHT / 2 - SQUARE_SIZE * 5.75 + 75, SQUARE_SIZE * 0.5, SQUARE_SIZE * 1.5))
-            pygame.draw.rect(WIN, PURPLE, (WIDTH / 2 + SQUARE_SIZE * 6.5 - 15, HEIGHT / 2 - SQUARE_SIZE * 5.25 + 75, SQUARE_SIZE * 0.5, SQUARE_SIZE * 0.5))
+            pygame.draw.rect(WIN, PURPLE, (
+                WIDTH / 2 + SQUARE_SIZE * 7 - 15, HEIGHT / 2 - SQUARE_SIZE * 5.75 + 75, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 1.5))
+            pygame.draw.rect(WIN, PURPLE, (
+                WIDTH / 2 + SQUARE_SIZE * 6.5 - 15, HEIGHT / 2 - SQUARE_SIZE * 5.25 + 75, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 0.5))
         elif block4 == 2:
-            pygame.draw.rect(WIN, LIGHT_BLUE, (WIDTH / 2 + SQUARE_SIZE * 6.75 - 15, HEIGHT / 2 - SQUARE_SIZE * 6 + 75, SQUARE_SIZE * 0.5, SQUARE_SIZE * 2))
+            pygame.draw.rect(WIN, LIGHT_BLUE, (
+                WIDTH / 2 + SQUARE_SIZE * 6.75 - 15, HEIGHT / 2 - SQUARE_SIZE * 6 + 75, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 2))
         elif block4 == 3:
-            pygame.draw.rect(WIN, ORANGE, (WIDTH / 2 + SQUARE_SIZE * 6.5 - 15, HEIGHT / 2 - SQUARE_SIZE * 5.75 + 75, SQUARE_SIZE * 0.5, SQUARE_SIZE * 1.5))
-            pygame.draw.rect(WIN, ORANGE, (WIDTH / 2 + SQUARE_SIZE * 7 - 15, HEIGHT / 2 - SQUARE_SIZE * 4.75 + 75, SQUARE_SIZE * 0.5, SQUARE_SIZE * 0.5))
+            pygame.draw.rect(WIN, ORANGE, (
+                WIDTH / 2 + SQUARE_SIZE * 6.5 - 15, HEIGHT / 2 - SQUARE_SIZE * 5.75 + 75, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 1.5))
+            pygame.draw.rect(WIN, ORANGE, (
+                WIDTH / 2 + SQUARE_SIZE * 7 - 15, HEIGHT / 2 - SQUARE_SIZE * 4.75 + 75, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 0.5))
         elif block4 == 4:
-            pygame.draw.rect(WIN, BLUE, (WIDTH / 2 + SQUARE_SIZE * 7 - 15, HEIGHT / 2 - SQUARE_SIZE * 5.75 + 75, SQUARE_SIZE * 0.5, SQUARE_SIZE * 1.5))
-            pygame.draw.rect(WIN, BLUE, (WIDTH / 2 + SQUARE_SIZE * 6.5 - 15, HEIGHT / 2 - SQUARE_SIZE * 4.75 + 75, SQUARE_SIZE * 0.5, SQUARE_SIZE * 0.5))
+            pygame.draw.rect(WIN, BLUE, (
+                WIDTH / 2 + SQUARE_SIZE * 7 - 15, HEIGHT / 2 - SQUARE_SIZE * 5.75 + 75, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 1.5))
+            pygame.draw.rect(WIN, BLUE, (
+                WIDTH / 2 + SQUARE_SIZE * 6.5 - 15, HEIGHT / 2 - SQUARE_SIZE * 4.75 + 75, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 0.5))
         elif block4 == 5:
-            pygame.draw.rect(WIN, RED, (WIDTH / 2 + SQUARE_SIZE * 7 - 15, HEIGHT / 2 - SQUARE_SIZE * 5.75 + 75, SQUARE_SIZE * 0.5, SQUARE_SIZE * 1))
-            pygame.draw.rect(WIN, RED, (WIDTH / 2 + SQUARE_SIZE * 6.5 - 15, HEIGHT / 2 - SQUARE_SIZE * 5.25 + 75, SQUARE_SIZE * 0.5, SQUARE_SIZE * 1))
+            pygame.draw.rect(WIN, RED, (
+                WIDTH / 2 + SQUARE_SIZE * 7 - 15, HEIGHT / 2 - SQUARE_SIZE * 5.75 + 75, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 1))
+            pygame.draw.rect(WIN, RED, (
+                WIDTH / 2 + SQUARE_SIZE * 6.5 - 15, HEIGHT / 2 - SQUARE_SIZE * 5.25 + 75, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 1))
         elif block4 == 6:
-            pygame.draw.rect(WIN, GREEN, (WIDTH / 2 + SQUARE_SIZE * 6.5 - 15, HEIGHT / 2 - SQUARE_SIZE * 5.75 + 75, SQUARE_SIZE * 0.5, SQUARE_SIZE * 1))
-            pygame.draw.rect(WIN, GREEN, (WIDTH / 2 + SQUARE_SIZE * 7 - 15, HEIGHT / 2 - SQUARE_SIZE * 5.25 + 75, SQUARE_SIZE * 0.5, SQUARE_SIZE * 1))
+            pygame.draw.rect(WIN, GREEN, (
+                WIDTH / 2 + SQUARE_SIZE * 6.5 - 15, HEIGHT / 2 - SQUARE_SIZE * 5.75 + 75, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 1))
+            pygame.draw.rect(WIN, GREEN, (
+                WIDTH / 2 + SQUARE_SIZE * 7 - 15, HEIGHT / 2 - SQUARE_SIZE * 5.25 + 75, SQUARE_SIZE * 0.5,
+                SQUARE_SIZE * 1))
         elif block4 == 7:
-            pygame.draw.rect(WIN, YELLOW, (WIDTH / 2 + SQUARE_SIZE * 6.5 - 15, HEIGHT / 2 - SQUARE_SIZE * 5.5 + 75, SQUARE_SIZE, SQUARE_SIZE))
+            pygame.draw.rect(WIN, YELLOW, (
+                WIDTH / 2 + SQUARE_SIZE * 6.5 - 15, HEIGHT / 2 - SQUARE_SIZE * 5.5 + 75, SQUARE_SIZE, SQUARE_SIZE))
         WIN.blit(current_level1, (0, 0))
         WIN.blit(current_score1, (0, 50))
         WIN.blit(current_lines1, (0, 100))
@@ -203,7 +310,6 @@ def main():
     while run:
         clock.tick(FPS)
         mouse = pygame.mouse.get_pos()
-        keys = pygame.key.get_pressed()
         if main_menu == 3 or main_menu == 4:
             grid_created = True
             block_created = True
@@ -221,8 +327,12 @@ def main():
                     score1 += 1
                 try:
                     piece = grid.get_square_position()
-                    grid.move1(piece[0], piece[1], piece[2], piece[3], piece[4], piece[5], piece[6], piece[7], piece[0]+1, piece[1]+1, piece[2]+1, piece[3]+1, piece[4], piece[5], piece[6], piece[7], main_menu, block1)
-                except:
+                    grid.move1(piece[0], piece[1], piece[2], piece[3], piece[4], piece[5], piece[6], piece[7],
+                               piece[0] + 1, piece[1] + 1, piece[2] + 1, piece[3] + 1, piece[4], piece[5], piece[6],
+                               piece[7], main_menu, block1)
+                except Exception as e:
+                    if e == KeyboardInterrupt:
+                        pass
                     block_created = False
                     blocks = grid.place_block(block1, block2, block3, block4)
                     block1, block2, block3, block4 = blocks[0], blocks[1], blocks[2], blocks[3]
@@ -328,19 +438,19 @@ def main():
                 if event.key == pygame.K_w:
                     if main_menu == 1 or main_menu == 2 or main_menu == 5:
                         pass
-                    elif holda == False:
+                    elif not holda:
                         hold1, block1 = block1, hold1
                         blocks = grid.erase_block(block1, block2, block3, block4)
                         block1, block2, block3, block4 = blocks[0], blocks[1], blocks[2], blocks[3]
                         block_created = False
                         holda = True
                 if event.key == pygame.K_d:
-                    if key_down == False:
+                    if not key_down:
                         d_down = True
                     else:
                         pass
                 if event.key == pygame.K_a:
-                    if key_down == False:
+                    if not key_down:
                         a_down = True
                     else:
                         pass
@@ -373,26 +483,36 @@ def main():
                         x = 0
                         y = 0
                         rotation_attempts = 0
-                        while rotated == False:
+                        while not rotated:
                             try:
                                 piece = grid.get_square_position()
                                 grid.move1(piece[0], piece[1], piece[2], piece[3], piece[4], piece[5], piece[6],
                                            piece[7],
-                                           piece[8][0]["right"][block1-1][block_type][orientation1-1][direction][0]+x,
-                                           piece[8][0]["right"][block1-1][block_type][orientation1-1][direction][1]+x,
-                                           piece[8][0]["right"][block1-1][block_type][orientation1-1][direction][2]+x,
-                                           piece[8][0]["right"][block1-1][block_type][orientation1-1][direction][3]+x,
-                                           piece[8][0]["right"][block1-1][block_type][orientation1-1][direction][4]+y,
-                                           piece[8][0]["right"][block1-1][block_type][orientation1-1][direction][5]+y,
-                                           piece[8][0]["right"][block1-1][block_type][orientation1-1][direction][6]+y,
-                                           piece[8][0]["right"][block1-1][block_type][orientation1-1][direction][7]+y,
+                                           piece[8][0]["right"][block1 - 1][block_type][orientation1 - 1][direction][
+                                               0] + x,
+                                           piece[8][0]["right"][block1 - 1][block_type][orientation1 - 1][direction][
+                                               1] + x,
+                                           piece[8][0]["right"][block1 - 1][block_type][orientation1 - 1][direction][
+                                               2] + x,
+                                           piece[8][0]["right"][block1 - 1][block_type][orientation1 - 1][direction][
+                                               3] + x,
+                                           piece[8][0]["right"][block1 - 1][block_type][orientation1 - 1][direction][
+                                               4] + y,
+                                           piece[8][0]["right"][block1 - 1][block_type][orientation1 - 1][direction][
+                                               5] + y,
+                                           piece[8][0]["right"][block1 - 1][block_type][orientation1 - 1][direction][
+                                               6] + y,
+                                           piece[8][0]["right"][block1 - 1][block_type][orientation1 - 1][direction][
+                                               7] + y,
                                            main_menu,
                                            block1)
                                 orientation1 += 1
                                 if orientation1 > 4:
                                     orientation1 = 1
                                 rotated = True
-                            except:
+                            except Exception as e:
+                                if e == KeyboardInterrupt:
+                                    pass
                                 if rotation_attempts == 0:
                                     y = 1
                                     rotation_attempts += 1
@@ -448,19 +568,27 @@ def main():
                         x = 0
                         y = 0
                         rotation_attempts = 0
-                        while rotated == False:
+                        while not rotated:
                             try:
                                 piece = grid.get_square_position()
                                 grid.move1(piece[0], piece[1], piece[2], piece[3], piece[4], piece[5], piece[6],
                                            piece[7],
-                                           piece[8][1]["left"][block1-1][block_type][orientation1-1][direction][0]+x,
-                                           piece[8][1]["left"][block1-1][block_type][orientation1-1][direction][1]+x,
-                                           piece[8][1]["left"][block1-1][block_type][orientation1-1][direction][2]+x,
-                                           piece[8][1]["left"][block1-1][block_type][orientation1-1][direction][3]+x,
-                                           piece[8][1]["left"][block1-1][block_type][orientation1-1][direction][4]+y,
-                                           piece[8][1]["left"][block1-1][block_type][orientation1-1][direction][5]+y,
-                                           piece[8][1]["left"][block1-1][block_type][orientation1-1][direction][6]+y,
-                                           piece[8][1]["left"][block1-1][block_type][orientation1-1][direction][7]+y,
+                                           piece[8][1]["left"][block1 - 1][block_type][orientation1 - 1][direction][
+                                               0] + x,
+                                           piece[8][1]["left"][block1 - 1][block_type][orientation1 - 1][direction][
+                                               1] + x,
+                                           piece[8][1]["left"][block1 - 1][block_type][orientation1 - 1][direction][
+                                               2] + x,
+                                           piece[8][1]["left"][block1 - 1][block_type][orientation1 - 1][direction][
+                                               3] + x,
+                                           piece[8][1]["left"][block1 - 1][block_type][orientation1 - 1][direction][
+                                               4] + y,
+                                           piece[8][1]["left"][block1 - 1][block_type][orientation1 - 1][direction][
+                                               5] + y,
+                                           piece[8][1]["left"][block1 - 1][block_type][orientation1 - 1][direction][
+                                               6] + y,
+                                           piece[8][1]["left"][block1 - 1][block_type][orientation1 - 1][direction][
+                                               7] + y,
                                            main_menu,
                                            block1)
                                 orientation1 -= 1
@@ -516,7 +644,9 @@ def main():
                     else:
                         try:
                             piece = grid.get_square_position()
-                            grid.move1(piece[0], piece[1], piece[2], piece[3], piece[4], piece[5], piece[6], piece[7], piece[0], piece[1], piece[2], piece[3], piece[4]+1, piece[5]+1, piece[6]+1, piece[7]+1, main_menu, block1)
+                            grid.move1(piece[0], piece[1], piece[2], piece[3], piece[4], piece[5], piece[6], piece[7],
+                                       piece[0], piece[1], piece[2], piece[3], piece[4] + 1, piece[5] + 1, piece[6] + 1,
+                                       piece[7] + 1, main_menu, block1)
                             counter1 = 0
                         except:
                             pass
@@ -530,7 +660,9 @@ def main():
                     else:
                         try:
                             piece = grid.get_square_position()
-                            grid.move1(piece[0], piece[1], piece[2], piece[3], piece[4], piece[5], piece[6], piece[7], piece[0], piece[1], piece[2], piece[3], piece[4]-1, piece[5]-1, piece[6]-1, piece[7]-1, main_menu, block1)
+                            grid.move1(piece[0], piece[1], piece[2], piece[3], piece[4], piece[5], piece[6], piece[7],
+                                       piece[0], piece[1], piece[2], piece[3], piece[4] - 1, piece[5] - 1, piece[6] - 1,
+                                       piece[7] - 1, main_menu, block1)
                             counter1 = 0
                         except:
                             pass
